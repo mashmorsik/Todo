@@ -1,15 +1,31 @@
 import axios from 'axios';
 import { title } from 'process';
+ 
+
+date = new Date();
+year = date.getFullYear();
+month = date.getMonth() + 1;
+day = date.getDate();
+document.querySelector('.date').innerHTML = month + "/" + day + "/" + year;
 
 const addTaskBtn = document.getElementById('add');
 const deskTaskInput = document.getElementById('writeTask');
 const toDoWrapper = document.querySelector('.toDoWrapper');
-let btnsDelete = []; 
+
+// let btnComplete = document.querySelector('.btnComplete')
+// btnComplete = []
+
+// btnComplete.addEventListener('click', colorCheckbox())
+
+// function colorCheckbox() {
+//     btnComplete.classList.add('checked')
+// }
 
 let tasks;
 !localStorage.tasks ? tasks = [] : tasks = JSON.parse(localStorage.getItem('tasks'));
 
 let toDoItemElems = [];
+
 
 
 function Task(id, title, description, completed = false) {
@@ -19,24 +35,20 @@ function Task(id, title, description, completed = false) {
     this.completed = completed;
 }
 
+
+
 const createTemplate = (task, index) => {
     return `
          <div class="toDoItem ${task.completed ? 'checked' : ''}">
          <div class="description"><b>${task.title}</b></div>
-            <div class="description">${task.description}</div>
             <div class="buttons">
-                <input onclick="completeTask${index}" class="btnComplete" type="checkbox" ${task.completed ? 'checked' : ''}>
-                <button class="btnDelete${index}" id="${task.id}">Delete</button>
+                <input class="btnComplete" type="checkbox" ${task.completed ? 'checked' : ''}>
+                <button class="material-icons" id="${task.id}">delete_outline</button> 
+                
     </div>
     </div>
     `
 }
-
-// const filterTasks = () => {
-//     const activeTasks = tasks.length && tasks.filter(item => item.completed == false);
-//     const completedTasks = tasks.length && tasks.filter(item => item.completed == true);
-//     tasks = [...activeTasks,...completedTasks];
-// }
 
 const fillHtmnlList = () => {
     toDoWrapper.innerHTML = "";
@@ -71,6 +83,7 @@ async function mget() {
 mget()
 
 async function mdelete(targetId) {
+    
     console.log(targetId)
     const res = await axios.delete("https://young-island-64931.herokuapp.com/delete",
         {
@@ -87,16 +100,7 @@ const updateLocal = () => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-const completeTask = index => {
-    tasks[index].completed = !tasks[index].completed;
-    if (tasks[index].completed) {
-        toDoItemElems[index].classList.add('checked');
-    } else {
-        toDoItemElems[index].classList.remove('checked');
-    }
-    updateLocal();
-    fillHtmnlList();
-}
+
 
 addTaskBtn.addEventListener('click', async function () {
     try {
@@ -114,26 +118,27 @@ addTaskBtn.addEventListener('click', async function () {
     }
 })
 
-// btnDelete.addEventListener('click', async function () {
-//     try {
-//         const res = await axios.delete('https://young-island-64931.herokuapp.com/delete',
-//             {
-//                 id: prop
-//             }
-//         )
-//
+// const deleteTask = index => {
+//     toDoItemElems[index].classList.add('delition');
+//     tasks.splice(index, 1);
+//     updateLocal();
+//     fillHtmnlList();
+// }
+
+// const completeTask = index => {
+//     tasks[index].completed = !tasks[index].completed;
+//     if (tasks[index].completed) {
+//         toDoItemElems[index].classList.add('checked');
+//     } else {
+//         toDoItemElems[index].classList.remove('checked');
 //     }
-// }) 
+//     updateLocal();
+//     fillHtmnlList();
+// }
 
+deskTaskInput.addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {
+        addTaskBtn.click()
+    }
+})
 
-
-
-
-
-// axios.patch('https://young-island-64931.herokuapp.com/update')
-//     .then(function (response) {
-//         console.log(response);
-//     })
-//     .catch(function (error) {
-//         console.log(error);
-//     })
