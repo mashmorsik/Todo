@@ -12,15 +12,6 @@ const addTaskBtn = document.getElementById('add');
 const deskTaskInput = document.getElementById('writeTask');
 const toDoWrapper = document.querySelector('.toDoWrapper');
 
-// let btnComplete = document.querySelector('.btnComplete')
-// btnComplete = []
-
-// btnComplete.addEventListener('click', colorCheckbox())
-
-// function colorCheckbox() {
-//     btnComplete.classList.add('checked')
-// }
-
 let tasks;
 !localStorage.tasks ? tasks = [] : tasks = JSON.parse(localStorage.getItem('tasks'));
 
@@ -117,24 +108,6 @@ addTaskBtn.addEventListener('click', async function () {
         console.error(error)
     }
 })
-
-// const deleteTask = index => {
-//     toDoItemElems[index].classList.add('delition');
-//     tasks.splice(index, 1);
-//     updateLocal();
-//     fillHtmnlList();
-// }
-
-// const completeTask = index => {
-//     tasks[index].completed = !tasks[index].completed;
-//     if (tasks[index].completed) {
-//         toDoItemElems[index].classList.add('checked');
-//     } else {
-//         toDoItemElems[index].classList.remove('checked');
-//     }
-//     updateLocal();
-//     fillHtmnlList();
-// }
 
 deskTaskInput.addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {
