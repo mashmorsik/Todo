@@ -26,19 +26,30 @@ function Task(id, title, description, completed = false) {
     this.completed = completed;
 }
 
-
-
 const createTemplate = (task, index) => {
     return `
          <div class="toDoItem ${task.completed ? 'checked' : ''}">
          <div class="description"><b>${task.title}</b></div>
             <div class="buttons">
-                <input class="btnComplete" type="checkbox" ${task.completed ? 'checked' : ''}>
+            <input id="qwe" onclick="completeTask(index)" id="btnComplete" class="btnComplete" type="checkbox" ${task.completed ? 'checked' : ''}>
+                <label id=${task.description} for="btnComplete" class="label-checkbox"></label> 
                 <button class="material-icons" id="${task.id}">delete_outline</button> 
                 
     </div>
     </div>
     `
+}
+
+const completeTask = index => {
+    tasks[index].completed = !tasks[index].completed;
+    console.log(tasks)
+    if(tasks[index].completed) {
+        toDoItemElems[index]?.classList.add('checked')
+    } else {
+        toDoItemElems[index]?.classList.remove('checked')
+    }
+    updateLocal()
+    fillHtmnlList()
 }
 
 const fillHtmnlList = () => {
@@ -54,8 +65,23 @@ const fillHtmnlList = () => {
             });
         })
 
+        tasks.forEach((item, index) => {
+            document.getElementById(item.description).addEventListener("click", () => {
+                completeTask(index);
+                fillHtmnlList();
+                updateLocal()
+            });
+        })
+
         toDoItemElems = document.querySelectorAll('.toDoItem');
     }
+
+ const qwe = document.getElementById("qwe");
+//  console.log(qwe)
+
+//  qwe.addEventListener("click", (e) => {
+//     console.log("aaa", e)
+//  })
 }
 
 fillHtmnlList();
@@ -90,8 +116,6 @@ async function mdelete(targetId) {
 const updateLocal = () => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
-
-
 
 addTaskBtn.addEventListener('click', async function () {
     try {
